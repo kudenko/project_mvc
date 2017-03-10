@@ -6,7 +6,7 @@
 
         public function __construct($host, $user, $password, $db_name){
             $this->connection = new mysqli($host, $user, $password, $db_name);
-
+           mysqli_set_charset($this->connection, 'utf8');
             if(mysqli_connect_error()){
                 throw new Exception('Could not onnect to DB');
             }
