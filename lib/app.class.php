@@ -19,6 +19,16 @@
             $controller_class = ucfirst(self::$router->getController()) . 'Controller';
             $controller_method = strtolower(self::$router->getMethodPrefix().self::$router->getAction());
 
+            $layout = self::$router->getRoute();
+            if($layout == 'admin' && Session::get('role') != 'admin'){
+                if($controller_method != 'admin_login'){
+//                    echo "error";
+//                    var_dump($controller_method);
+//                    die();
+                    Router::redirect('/admin/users/login');
+                }
+            }
+
             //Colling controller's method
 
             $controller_object = new $controller_class();
@@ -31,7 +41,6 @@
                 throw new Exception("Method $controller_method of class $controller_class doesn't exists");
             }
 
-            $layout = self::$router->getRoute();
             $layout_path = VIEWS_PATH.DS.$layout.'.html';
             $layout_view_object = new View(compact('content'), $layout_path);
             echo $layout_view_object->render();
